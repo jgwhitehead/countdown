@@ -1,4 +1,3 @@
-
 def validate_word(word, letters):
     letters_copy = letters[:]
     for c in word:
@@ -20,15 +19,16 @@ def get_user_input():
     return letters
 
 
-matches = []
-file = '/usr/share/dict/words'
-letters = get_user_input()
-for word in open(file):
-    word = word.lower().strip()
-    if validate_word(word, letters):
-        matches.append(word)
-print("{s} matches".format(s=len(matches)))
-matches.sort(key=len)
-for match in matches:
-    print(match)
-print("longest word length: {longestLength}".format(longestLength=len(matches[-1])))
+if __name__ == '__main__':
+    matches = []
+    file = '/usr/share/dict/words'
+    letters = get_user_input()
+    for word in open(file):
+        word = word.lower().strip()
+        if validate_word(word, letters):
+            matches.append(word)
+    print("{s} matches".format(s=len(matches)))
+    matches.sort(key=len)
+    for match in matches:
+        print(match)
+    print("longest word length: {longestLength}".format(longestLength=len(matches[-1])))
