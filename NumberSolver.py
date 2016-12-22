@@ -111,9 +111,14 @@ if __name__ == '__main__':
 
     print('Solutions:')
     correct_solutions = get_correct_solutions(target, equations)
-    while len(correct_solutions) is 0:
+    iteration = 0
+    while len(correct_solutions) == 0:
         print("no solution for {target}, trying next".format(target=target))
-        target -= 1
+        iteration += 1
+        if iteration % 2 == 0:
+            target -= iteration
+        else:
+            target += iteration
         correct_solutions = get_correct_solutions(target, equations)
 
     print("solutions for {target}".format(target=target))
