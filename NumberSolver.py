@@ -23,7 +23,8 @@ def get_user_input_target():
         print("{s} numbers entered".format(s=len(inputted.split())))
         if len(inputted.split()) == 1:
             # TODO typecheck
-            return int(inputted.strip())
+            if is_number(inputted.split()[0]):
+                return int(inputted.strip())
 
 
 def is_number(s):
@@ -37,17 +38,18 @@ def is_number(s):
 def calculate(equation):
     stack = []
     result = 0
-    for i in equation:
-        if is_number(i):
-            stack.insert(0, i)
-        else:
-            # if len(stack) == 1:
-                # return stack.pop(0)
-            print('stack: %s' % stack)
-            n1 = float(stack.pop(1))
-            n2 = float(stack.pop(0))
-            result = operations[i](n1, n2)
-            stack.insert(0, str(result))
+    try:
+        for i in equation:
+            if is_number(i):
+                stack.insert(0, i)
+            else:
+                # print('stack: %s' % stack)
+                n1 = float(stack.pop(1))
+                n2 = float(stack.pop(0))
+                result = operations[i](n1, n2)
+                stack.insert(0, str(result))
+    except ZeroDivisionError:
+        return 0
     return result
 
 
@@ -66,23 +68,18 @@ def generate_equations(numbers):
         number_combinations = itertools.permutations(numbers, length)
         # [print(a) for a in number_combinations]
 
-        operator_combinations = itertools.combinations_with_replacement(operations, length-1)
+        operator_combinations = itertools.combinations_with_replacement(operations, length - 1)
         # [print(a) for a in operator_combinations]
 
 
         d = list(number_combinations)
         e = list(operator_combinations)
         # equations.extend((map(list.__add__, d, e)))
-        equations.extend(x + y for x,y in zip(d, e))
+        for i in d:
+            for j in e:
+                equations.append(i + j)
 
-        [print(a) for a in equations]
-        # for i in range(numbers.length - 1):
-        #     append_all_combinations(operation_combinations, operations.keys())
-
-        # generate all possible number orderings
-
-        # combine operation_combinations with number combinations
-        return equations
+    return equations
 
 
 def append_all_combinations(existing_stems, combinators):
@@ -93,18 +90,32 @@ def append_all_combinations(existing_stems, combinators):
     return new_combinations
 
 
-if __name__ == '__main__':
-    components = [1, 2, 3, 4, 5, 6]
-    target = 5
-
+def get_correct_solutions(target, equations):
     solutions = []
-    equations = generate_equations(components)
-    [print(a) for a in equations]
-
     for equation in equations:
         if calculate(equation) == target:
             solutions.append(equation)
+    return solutions
+
+
+if __name__ == '__main__':
+    # components = [1, 2, 3, 4, 5, 6]
+    # target = 5
+    components = get_user_input_components()
+    target = get_user_input_target()
+
+    equations = generate_equations(components)
+    # [print(a) for a in equations]
+
+
 
     print('Solutions:')
-    for solution in solutions:
+    correct_solutions = get_correct_solutions(target, equations)
+    while len(correct_solutions) is 0:
+        print("no solution for {target}, trying next".format(target=target))
+        target -= 1
+        correct_solutions = get_correct_solutions(target, equations)
+
+    print("solutions for {target}".format(target=target))
+    for solution in correct_solutions:
         print(solution)
