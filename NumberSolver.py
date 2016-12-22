@@ -22,7 +22,6 @@ def get_user_input_target():
         inputted = input('enter 1 target number:')
         print("{s} numbers entered".format(s=len(inputted.split())))
         if len(inputted.split()) == 1:
-            # TODO typecheck
             if is_number(inputted.split()[0]):
                 return int(inputted.strip())
 
@@ -46,7 +45,7 @@ def calculate(equation):
                 # print('stack: %s' % stack)
                 n1 = float(stack.pop(1))
                 n2 = float(stack.pop(0))
-                result = operations[i](n1, n2)
+                result = operations[i](n2, n1)
                 stack.insert(0, str(result))
     except ZeroDivisionError:
         return 0
@@ -54,30 +53,16 @@ def calculate(equation):
 
 
 def generate_equations(numbers):
-    # TODO don't need to use all numbers
     equations = []
-    equation = ""
-
-    # build all possible operand combinations, then combine with all possible number orders
-    # build operations
-    # start off with each of the available operations
-    operation_combinations = operations.keys()
-    # grow the list with all possible combinations
-
     for length in range(2, 6):
         number_combinations = itertools.permutations(numbers, length)
-        # [print(a) for a in number_combinations]
-
         operator_combinations = itertools.combinations_with_replacement(operations, length - 1)
-        # [print(a) for a in operator_combinations]
-
-
-        d = list(number_combinations)
-        e = list(operator_combinations)
-        # equations.extend((map(list.__add__, d, e)))
-        for i in d:
-            for j in e:
-                equations.append(i + j)
+        number_combination_list = list(number_combinations)
+        operation_combinations_list = list(operator_combinations)
+        # equations.extend((map(list.__add__, number_combination_list, operation_combinations_list)))
+        for number_combo in number_combination_list:
+            for operator_combo in operation_combinations_list:
+                equations.append(number_combo + operator_combo)
 
     return equations
 
@@ -106,8 +91,6 @@ if __name__ == '__main__':
 
     equations = generate_equations(components)
     # [print(a) for a in equations]
-
-
 
     print('Solutions:')
     correct_solutions = get_correct_solutions(target, equations)
