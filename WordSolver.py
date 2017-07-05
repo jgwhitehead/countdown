@@ -6,7 +6,7 @@ def validate_word(word, letters):
         letters_copy.remove(c)
     return True
 
-
+t
 def get_user_input():
     letters = []
     while True:
