@@ -61,5 +61,5 @@ if __name__ == '__main__':
         iteration += 1
 
     print("solutions for {target}".format(target=target))
-    for solution in correct_solutions:
+    for solution in set(correct_solutions):
         print(solution)
