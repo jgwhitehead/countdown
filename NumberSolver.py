@@ -66,15 +66,6 @@ def generate_equations(numbers):
 
     return equations
 
-
-def append_all_combinations(existing_stems, combinators):
-    new_combinations = []
-    for existingStem in existing_stems:
-        for combinator in combinators:
-            new_combinations.append(existingStem + combinator)
-    return new_combinations
-
-
 def get_correct_solutions(target, equations):
     solutions = []
     for equation in equations:
